@@ -40,10 +40,12 @@ def extract_characteristics_for_one_ssd(url:str, characteristics: dict[str, list
         key = characteristic.xpath('th/text()')[0].replace(":", "")
         value = characteristic.xpath('td/text()')[0]
         if key in characteristics:
+            if key == "Type" and key in found_keys:
+                # Both Flash and DRAM have "Type" key. Assuming DRAM is the second one and skip that.
+                continue
             characteristics[key].append(value)
             found_keys.add(key)
-        else:
-            characteristics[key] = [value]
+        
     
     for key in characteristics:
         if key not in found_keys:
